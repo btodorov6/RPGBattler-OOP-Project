@@ -1,7 +1,8 @@
 #include "Hero.h"
 
 Hero::Hero(const std::string& heroName, int heroMaxHp, int heroMaxDmg)
-	: name(heroName),maxDmg(heroMaxDmg), maxHP(heroMaxHp), currentHP(heroMaxHp), level(1), isBladeActive(false)
+	: name(heroName), maxDmg(heroMaxDmg), maxHP(heroMaxHp), currentHP(heroMaxHp), level(1),
+	isBladeActive(false), isAffectedByMirror(false), isShieldActive(false)
 {
 }
 void Hero::TakeDamage(int damage)

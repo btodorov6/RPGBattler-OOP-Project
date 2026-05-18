@@ -31,5 +31,12 @@ public:
 	void addHero(std::unique_ptr<Hero> newHero);
 	Hero* getHero(size_t index);
 	size_t getHeroCount() const;
+
+	void printInventory();
+
+	bool hasItem(const std::string& name) const;
+	void consumeItem(const std::string& name);
+	void useItemOnTarget(const std::string& name, Hero& target);
+	std::string getItemNameFromMenu(int choice) const;
 };
 

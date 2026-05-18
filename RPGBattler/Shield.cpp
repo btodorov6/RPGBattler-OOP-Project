@@ -7,5 +7,5 @@ std::string Shield::getName()
 
 void Shield::use(Hero& target)
 {
-	target.activateShield();
+	return;
 }

@@ -7,5 +7,5 @@ std::string Ray::getName()
 
 void Ray::use(Hero& target)
 {
-	target.cleansedFromRay();
+	return;
 }

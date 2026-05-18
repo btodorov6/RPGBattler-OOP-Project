@@ -133,6 +133,7 @@
     <ClCompile Include="HealingPotion.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="Mage.cpp" />
+    <ClCompile Include="Mirror.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="RPGBattler.cpp" />
     <ClCompile Include="Shield.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Mage.h" />
+    <ClInclude Include="Mirror.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Shield.h" />
     <ClInclude Include="User.h" />

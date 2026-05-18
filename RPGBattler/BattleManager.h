@@ -1,11 +1,12 @@
 #pragma once
 #include "Hero.h"
+#include "User.h"
 class BattleManager
 {
 private:
 
 	BattleManager() = default;
-	void playTurn(/*User& player1, User& player2, */Hero& activeHero, Hero& targetHero);
+	void playTurn(User& player1, User& player2, Hero& activeHero, Hero& targetHero);
 
 public:
 
@@ -14,6 +15,6 @@ public:
 
 	static BattleManager& getBattleManager();
 
-	void startBattle(/*User& player1, User& player2, */Hero& hero1, Hero& hero2);
+	void startBattle(User& player1, User& player2, Hero& hero1, Hero& hero2);
 };
 

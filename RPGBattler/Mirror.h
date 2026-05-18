@@ -1,6 +1,6 @@
 #pragma once
 #include "Item.h"
-class Shield final: public Item
+class Mirror final: public Item
 {
 	std::string getName() override;
 

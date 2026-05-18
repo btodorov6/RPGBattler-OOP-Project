@@ -48,6 +48,9 @@
     <ClCompile Include="Shield.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Mirror.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hero.h">
@@ -81,6 +84,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Shield.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mirror.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
