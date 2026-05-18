@@ -9,14 +9,35 @@ int Warrior::Attack()
 {
 	int minDmg = 1;
 	int generatedDmg = (rand() % maxDmg) + minDmg;
+
+	if (isBladeActive)
+	{
+		generatedDmg *= 2;
+		isBladeActive = false;
+	}
+
 	return generatedDmg;
 }
 
 void Warrior::TakeDamage(int damage)
 {
-	int warriorBlock = (rand() % 4) + 1;
-	damage -= warriorBlock;
-	std::println("{} blocked {}dmg", name, warriorBlock);
+	if (isShieldActive)
+	{
+		isAffectedByMirror = false;
+		isShieldActive = false;
+		return;
+	}
+	if (!isAffectedByMirror)
+	{
+		int warriorBlock = (rand() % (maxHP / 5)) + 1; //change of formula to account for high level characters
+		damage -= warriorBlock;
+		std::println("{} blocked {}dmg", name, warriorBlock);
+	}
+	else
+	{
+		std::println("Mirror stops {} from using his special...", name);
+		isAffectedByMirror = false;
+	}
 	if (damage > 0)
 	{
 		currentHP -= damage;

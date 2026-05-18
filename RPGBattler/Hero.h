@@ -8,6 +8,9 @@ protected:
 	int maxDmg;
 	int currentHP;
 	int level;
+	bool isBladeActive;
+	bool isAffectedByMirror;
+	bool isShieldActive;
 public:
 	Hero(const std::string& heroName, int heroMaxHp, int heroMaxDmg);
 	virtual ~Hero() = default;
@@ -22,5 +25,15 @@ public:
 
 	void levelUpMaxHp();
 	void levelUpMaxDmg();
+
+	void heal(int amountToHeal);
+
+	void activateBlade();
+
+	void hitByMirror();
+
+	void cleansedFromRay();
+
+	void activateShield();
 };
 

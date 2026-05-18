@@ -1,11 +1,17 @@
 #include "Hero.h"
 
 Hero::Hero(const std::string& heroName, int heroMaxHp, int heroMaxDmg)
-	: name(heroName),maxDmg(heroMaxDmg), maxHP(heroMaxHp), currentHP(heroMaxHp), level(1)
+	: name(heroName),maxDmg(heroMaxDmg), maxHP(heroMaxHp), currentHP(heroMaxHp), level(1), isBladeActive(false)
 {
 }
 void Hero::TakeDamage(int damage)
 {
+	if (isShieldActive)
+	{
+		isAffectedByMirror = false;
+		isShieldActive = false;
+		return;
+	}
 	currentHP -= damage;
 	if (currentHP <= 0)
 	{
@@ -45,4 +51,33 @@ void Hero::levelUpMaxHp()
 void Hero::levelUpMaxDmg()
 {
 	maxDmg += 1;
+}
+
+void Hero::heal(int amount)
+{
+	currentHP += amount;
+	if (currentHP > maxHP)
+	{
+		currentHP = maxHP;
+	}
+}
+
+void Hero::activateBlade()
+{
+	isBladeActive = true;
+}
+
+void Hero::hitByMirror()
+{
+	isAffectedByMirror = true;
+}
+
+void Hero::cleansedFromRay()
+{
+	isAffectedByMirror = false;
+}
+
+void Hero::activateShield()
+{
+	isShieldActive = true;
 }

@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include "Hero.h"
+#include "Item.h"
 class User
 {
 private:
@@ -11,7 +12,7 @@ private:
 	int totalXp;
 	int currentXp;
 	std::vector<std::unique_ptr<Hero>> heroes;
-	//items
+	std::vector<std::unique_ptr<Item>> inventory;
 	int battlesPlayed;
 	int battlesWon;
 public:
