@@ -27,6 +27,8 @@ User::User(const std::string& name, const std::string& pass)
 		std::cin.ignore(10000, '\n');
 		choice = -1;
 	}
+
+	std::cin.ignore();
 	std::print("What is your hero called?: ");
 	std::string heroName;
 	std::getline(std::cin, heroName);

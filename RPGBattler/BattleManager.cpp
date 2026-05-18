@@ -1,15 +1,21 @@
 #include "BattleManager.h"
 #include <iostream>
 #include <print>
+
+//COLOURS
+const std::string RESET = "\033[0m";
+const std::string PLAYER1_COLOUR = "\033[36m";
+const std::string PLAYER2_COLOUR = "\033[31m";
+const std::string REACTION_COLOUR = "\033[33m";
 BattleManager& BattleManager::getBattleManager()
 {
 	static BattleManager bm;
 	return bm;
 }
 
-void BattleManager::playTurn(User& activePlayer, User& targetPlayer, Hero& activeHero, Hero& targetHero) //turn logic
+void BattleManager::playTurn(User& activePlayer, User& targetPlayer, Hero& activeHero, Hero& targetHero, const std::string& playerColour) //turn logic
 {
-	std::println("\n{}'s turn.", activeHero.getName());
+	std::println("\n{}{}'s turn.",playerColour, activeHero.getName());
 	
 	while (true)
 	{
@@ -26,18 +32,18 @@ void BattleManager::playTurn(User& activePlayer, User& targetPlayer, Hero& activ
 
 			if (dmg > 0 && targetPlayer.hasItem("Shield"))
 			{
-				std::print("{} has attacked {} for {}dmg but {} has a SHIELD. Do you want to use it? (y/n) : ",activeHero.getName(),targetHero.getName(),dmg,targetPlayer.getUsername());
+				std::print("{}{} has attacked {} for {}dmg but {} has a SHIELD. Do you want to use it? (y/n) : ",REACTION_COLOUR, activeHero.getName(),targetHero.getName(),dmg,targetPlayer.getUsername());
 				char useShield;
 				std::cin >> useShield;
 				if (useShield == 'y' ||useShield == 'Y')
 				{
 					targetPlayer.consumeItem("Shield");
 					dmg = 0;
-					std::println("{} used a SHIELD and blocked the attack!", targetPlayer.getUsername());
+					std::println("{} used a SHIELD and blocked the attack!{}", targetPlayer.getUsername(),playerColour);
 				}
 			}
 
-			else if (dmg > 0)
+			if (dmg > 0)
 			{
 				std::println("{} attacked for {}dmg!", activeHero.getName(), dmg);
 				targetHero.TakeDamage(dmg);
@@ -71,14 +77,14 @@ void BattleManager::playTurn(User& activePlayer, User& targetPlayer, Hero& activ
 			{
 				if (targetPlayer.hasItem("Ray"))
 				{
-					std::print("{} has used MIRROR, but {} has a RAY! Counter it? (y/n): ", activePlayer.getUsername(),targetPlayer.getUsername());
+					std::print("{}{} has used MIRROR, but {} has a RAY! Counter it? (y/n): ",REACTION_COLOUR, activePlayer.getUsername(),targetPlayer.getUsername());
 					char useRay;
 					std::cin >> useRay;
 					if (useRay == 'y' || useRay == 'Y')
 					{
 						targetPlayer.consumeItem("Ray");
 						activePlayer.consumeItem("Mirror");
-						std::println("{} used RAY! The MIRROR shattered.", targetPlayer.getUsername());
+						std::println("{} used RAY! The MIRROR shattered.{}", targetPlayer.getUsername(),playerColour);
 						return;
 					}
 				}
@@ -106,15 +112,16 @@ void BattleManager::startBattle(User& player1, User& player2, Hero& hero1, Hero&
 	{
 		if (isPlayer1Turn)
 		{
-			playTurn(player1, player2, hero1, hero2);
+			playTurn(player1, player2, hero1, hero2,PLAYER1_COLOUR);
 		}
 		else
 		{
-			playTurn(player2, player1, hero2, hero1);
+			playTurn(player2, player1, hero2, hero1,PLAYER2_COLOUR);
 		}
 		isPlayer1Turn = !isPlayer1Turn;
 		
 	}
+	std::print("{}",REACTION_COLOUR);
 	if (hero1.isAlive())
 	{
 		std::println("{} Won!",hero1.getName());

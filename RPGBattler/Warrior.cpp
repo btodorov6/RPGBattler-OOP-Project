@@ -21,12 +21,6 @@ int Warrior::Attack()
 
 void Warrior::TakeDamage(int damage)
 {
-	if (isShieldActive)
-	{
-		isAffectedByMirror = false;
-		isShieldActive = false;
-		return;
-	}
 	if (!isAffectedByMirror)
 	{
 		int warriorBlock = (rand() % (maxHP / 5)) + 1; //change of formula to account for high level characters

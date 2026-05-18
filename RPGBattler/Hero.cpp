@@ -2,17 +2,11 @@
 
 Hero::Hero(const std::string& heroName, int heroMaxHp, int heroMaxDmg)
 	: name(heroName), maxDmg(heroMaxDmg), maxHP(heroMaxHp), currentHP(heroMaxHp), level(1),
-	isBladeActive(false), isAffectedByMirror(false), isShieldActive(false)
+	isBladeActive(false), isAffectedByMirror(false)
 {
 }
 void Hero::TakeDamage(int damage)
 {
-	if (isShieldActive)
-	{
-		isAffectedByMirror = false;
-		isShieldActive = false;
-		return;
-	}
 	currentHP -= damage;
 	if (currentHP <= 0)
 	{
@@ -71,14 +65,4 @@ void Hero::activateBlade()
 void Hero::hitByMirror()
 {
 	isAffectedByMirror = true;
-}
-
-void Hero::cleansedFromRay()
-{
-	isAffectedByMirror = false;
-}
-
-void Hero::activateShield()
-{
-	isShieldActive = true;
 }

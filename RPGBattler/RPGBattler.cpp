@@ -9,7 +9,10 @@
 int main()
 {
     srand(time(NULL));
-    Warrior hero1Test("Borkos");
-    Mage hero2Test("Valkos");
-    BattleManager::getBattleManager().startBattle(hero1Test, hero2Test);
+
+    User player1("Borko", "pass1");
+    User player2("Valyo", "pass2");
+
+
+    BattleManager::getBattleManager().startBattle(player1, player2, *player1.getHero(0), *player2.getHero(0));
 }
