@@ -50,7 +50,45 @@ void BattleManager::playTurn(User& activePlayer, User& targetPlayer, Hero& activ
 			std::println("{}'s Inventory: ",activePlayer.getUsername());
 			activePlayer.printInventory();
 			std::println("0.Cancel");
+			std::print("Choose item: ");
+			int itemChoice;
+			std::cin >> itemChoice;
 
+			if (itemChoice == 0) continue;
+
+			std::string itemName = activePlayer.getItemNameFromMenu(itemChoice);
+
+			if (itemName == "")
+			{
+				std::println("Invalid choice try again...");
+				continue;
+			}
+			if (itemName == "Shield" || itemName == "Ray") {
+				std::println("{} can only be used automatically as a reaction!", itemName);
+				continue;
+			}
+			if (itemName == "Mirror")
+			{
+				if (targetPlayer.hasItem("Ray"))
+				{
+					std::print("{} has used MIRROR, but {} has a RAY! Counter it? (y/n): ", activePlayer.getUsername(),targetPlayer.getUsername());
+					char useRay;
+					std::cin >> useRay;
+					if (useRay == 'y' || useRay == 'Y')
+					{
+						targetPlayer.consumeItem("Ray");
+						activePlayer.consumeItem("Mirror");
+						std::println("{} used RAY! The MIRROR shattered.", targetPlayer.getUsername());
+						return;
+					}
+				}
+				activePlayer.useItemOnTarget("Mirror", targetHero);
+			}
+			else
+			{
+				activePlayer.useItemOnTarget(itemName, activeHero);
+			}
+			return;
 		}
 		else
 		{
