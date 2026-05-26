@@ -40,11 +40,13 @@ int Hero::getLevel() const
 
 void Hero::levelUpMaxHp()
 {
+	level++;
 	maxHP += 2;
 }
 
 void Hero::levelUpMaxDmg()
 {
+	level++;
 	maxDmg += 1;
 }
 

@@ -244,3 +244,37 @@ std::string User::getItemNameFromMenu(int choice) const
 	}
 	return ""; 
 }
+
+std::string User::getPassword() const
+{
+	return password;
+}
+
+int User::getWins() const
+{
+	return battlesWon;
+}
+double User::getWinRate() const
+{
+	if (battlesPlayed == 0) return 0.0;
+
+	return ((double)battlesWon / (double)battlesPlayed);
+}
+void User::addItem(std::unique_ptr<Item> item)
+{
+	inventory.push_back(std::move(item));
+}
+
+void User::printHeroes() const
+{
+	for (size_t i = 0; i < heroes.size(); ++i)
+	{
+		std::println("{}. {} (Level: {}, HP: {}, MaxDmg: {})",
+			i + 1,
+			heroes[i]->getName(),
+			heroes[i]->getLevel(),
+			heroes[i]->getMaxHp(),
+			heroes[i]->getLevel()
+		);
+	}
+}

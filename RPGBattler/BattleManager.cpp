@@ -125,12 +125,22 @@ void BattleManager::startBattle(User& player1, User& player2, Hero& hero1, Hero&
 	if (hero1.isAlive())
 	{
 		std::println("{} Won!",hero1.getName());
-		//give 10xp
+		player1.addWin();
+		player1.addGamePlayed();
+		player2.addGamePlayed();
+
+		player1.addXp(10);
+		player2.addXp(5);
 	}
 	else
 	{
 		std::println("{} Won!", hero2.getName());
-		//give 5xp
+		player2.addWin();
+		player1.addGamePlayed();
+		player2.addGamePlayed();
+
+		player2.addXp(10);
+		player1.addXp(5);
 	}
 
 }

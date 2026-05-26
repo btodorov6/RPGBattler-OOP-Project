@@ -137,6 +137,7 @@
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="RPGBattler.cpp" />
     <ClCompile Include="Shield.cpp" />
+    <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="Warrior.cpp" />
   </ItemGroup>
@@ -151,6 +152,7 @@
     <ClInclude Include="Mirror.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Shield.h" />
+    <ClInclude Include="SystemManager.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="Warrior.h" />
   </ItemGroup>
