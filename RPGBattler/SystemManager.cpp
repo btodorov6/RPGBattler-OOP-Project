@@ -11,6 +11,7 @@
 #include "Mage.h"
 #include "Archer.h"
 #include "Warrior.h"
+#include "BattleManager.h"
 SystemManager::SystemManager()
 	:loggedInPlayer1(nullptr), loggedInPlayer2(nullptr)
 {
@@ -72,7 +73,20 @@ void SystemManager::run()
             showLeaderboard(); 
             break;
         case 4:
-            //shop logic
+            if (!loggedInPlayer1) 
+            {
+                std::println("Please login at least Player 1 to use the shop.");
+            }
+            else 
+            {
+                std::println("Which player wants to shop? 1. {} | 2. {}",loggedInPlayer1->getUsername(),
+                    loggedInPlayer2 ? loggedInPlayer2->getUsername() : "Not logged");
+                int shopChoice;
+                std::cin >> shopChoice;
+                if (shopChoice == 2 && loggedInPlayer2) shopMenu(*loggedInPlayer2);
+                else shopMenu(*loggedInPlayer1);
+            }
+            break;
         case 5:
             startBattleMenu();
             break;
@@ -103,7 +117,8 @@ void SystemManager::registerUser()
         return;
     }
 
-    allUsers.push_back(User(username, password));
+    User newUser(username, password);
+    allUsers.push_back(std::move(newUser));
     std::println("Registration successful for {}!", username);
 }
 
@@ -150,15 +165,20 @@ void SystemManager::showLeaderboard()
         return;
     }
 
-    std::vector<User> sorted = allUsers;
+    std::vector<User*> sorted;
 
-    std::sort(sorted.begin(), sorted.end(), [](const User& a, const User& b) 
+    for (auto& user : allUsers)
+    {
+        sorted.push_back(&user);
+    }
+
+    std::sort(sorted.begin(), sorted.end(), [](const User* a, const User* b) 
         {
-        if (a.getWins() != b.getWins()) return a.getWins() > b.getWins();
+        if (a->getWins() != b->getWins()) return a->getWins() > b->getWins();
 
-        if (a.getTotalXp() != b.getTotalXp()) return a.getTotalXp() > b.getTotalXp();
+        if (a->getTotalXp() != b->getTotalXp()) return a->getTotalXp() > b->getTotalXp();
 
-        return a.getWinRate() > b.getWinRate(); 
+        return a->getWinRate() > b->getWinRate(); 
         }
     );
 
@@ -168,7 +188,7 @@ void SystemManager::showLeaderboard()
     int position = 1;
     for (const auto& user : sorted) {
         std::println("{:<5} {:<15} {:<10} {:<10} {:.2f}%",
-            position, user.getUsername(), user.getWins(), user.getTotalXp(), user.getWinRate() * 100);
+            position, user->getUsername(), user->getWins(), user->getTotalXp(), user->getWinRate() * 100);
         position++;
     }
 }
@@ -284,4 +304,48 @@ void SystemManager::shopMenu(User& user)
             std::println("Not enough XP or invalid choice!");
         }
     }
+}
+
+void SystemManager::startBattleMenu()
+{
+    if (loggedInPlayer1 == nullptr || loggedInPlayer2 == nullptr)
+    {
+        std::println("Both players must be logged in to start the battle!");
+        return;
+    }
+
+    std::println("\n{} (Player 1), choose your hero for the battle:", loggedInPlayer1->getUsername());
+    loggedInPlayer1->printHeroes();
+    std::print("Enter hero number: ");
+    int h1Choice;
+    std::cin >> h1Choice;
+    Hero* h1 = loggedInPlayer1->getHero(h1Choice - 1);
+
+    std::println("\n{} (Player 2), choose your hero for the battle:", loggedInPlayer2->getUsername());
+    loggedInPlayer2->printHeroes();
+    std::print("Enter hero number: ");
+    int h2Choice;
+    std::cin >> h2Choice;
+    Hero* h2 = loggedInPlayer2->getHero(h2Choice - 1);
+
+    if (h1 != nullptr && h2 != nullptr)
+    {
+        BattleManager::getBattleManager().startBattle(*loggedInPlayer1, *loggedInPlayer2, *h1, *h2);
+
+        h1->heal(h1->getMaxHp());
+        h2->heal(h2->getMaxHp());
+        std::println("\nHeroes have been fully healed back to maximum HP!");
+    }
+    else
+    {
+        std::println("Invalid hero selection! Battle canceled.");
+    }
+}
+
+void SystemManager::saveToFile()
+{
+}
+
+void SystemManager::loadFromFile()
+{
 }

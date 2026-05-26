@@ -17,6 +17,7 @@ private:
 	int battlesWon;
 public:
 	User(const std::string& name, const std::string& pass);
+	User(User&&) noexcept = default;
 
 	const std::string& getUsername() const;
 	bool checkPassword(const std::string& inputPass) const;

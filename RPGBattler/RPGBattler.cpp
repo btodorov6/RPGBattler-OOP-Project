@@ -6,13 +6,10 @@
 #include "Warrior.h"
 #include "Mage.h"
 #include "Archer.h"
+#include "SystemManager.h"
 int main()
 {
     srand(time(NULL));
 
-    User player1("Borko", "pass1");
-    User player2("Valyo", "pass2");
-
-
-    BattleManager::getBattleManager().startBattle(player1, player2, *player1.getHero(0), *player2.getHero(0));
+    SystemManager::getSystemManager().run();
 }
