@@ -69,6 +69,11 @@ void Hero::hitByMirror()
 	isAffectedByMirror = true;
 }
 
+int Hero::getMaxDmg() const
+{
+	return maxDmg;
+}
+
 void Hero::loadStats(int newLevel, int newMaxHp, int newMaxDmg)
 {
 	level = newLevel;

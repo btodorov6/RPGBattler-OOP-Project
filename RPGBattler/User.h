@@ -11,13 +11,14 @@ class User
 private:
 	std::string username;
 	std::string password;
-	int totalXp;
-	int currentXp;
+	int totalXp = 0;
+	int currentXp = 0;
 	std::vector<std::unique_ptr<Hero>> heroes;
 	std::vector<std::unique_ptr<Item>> inventory;
-	int battlesPlayed;
-	int battlesWon;
+	int battlesPlayed = 0;
+	int battlesWon = 0;
 public:
+	User() = default;
 	User(const std::string& name, const std::string& pass);
 	User(User&&) noexcept = default;
 

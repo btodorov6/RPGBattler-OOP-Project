@@ -347,8 +347,31 @@ void SystemManager::startBattleMenu()
 
 void SystemManager::saveToFile()
 {
+    std::ofstream ofs("gamedata.txt");
+    if (!ofs.is_open()) return;
+
+    ofs << allUsers.size() << "\n";
+    for (const auto& user : allUsers)
+    {
+        user.serialize(ofs);
+    }
+    ofs.close();
 }
 
 void SystemManager::loadFromFile()
 {
+    std::ifstream ifs("gamedata.txt");
+    if (!ifs.is_open()) return;
+
+    size_t userCount;
+    if (!(ifs >> userCount)) return;
+
+    allUsers.clear();
+    for (size_t i = 0; i < userCount; ++i)
+    {
+        User tempUser;
+        tempUser.deserialize(ifs);
+        allUsers.push_back(std::move(tempUser));
+    }
+    ifs.close();
 }
