@@ -302,5 +302,43 @@ void User::serialize(std::ofstream& ofs) const
 
 void User::deserialize(std::ifstream& ifs)
 {
+	ifs >> username >> password >> totalXp >> currentXp >> battlesPlayed >> battlesWon;
 
+	size_t heroCount;
+	ifs >> heroCount;
+	heroes.clear();
+
+	for (size_t i = 0; i < heroCount; ++i)
+	{
+		char type;
+		std::string heroName;
+		int lvl, maxHP, maxDmg;
+
+		ifs >> type >> heroName >> lvl >> maxHP >> maxDmg;
+
+		std::unique_ptr<Hero> hero;
+		if (type == 'W') hero = std::make_unique<Warrior>(heroName);
+		else if (type == 'A') hero = std::make_unique<Archer>(heroName);
+		else hero = std::make_unique<Mage>(heroName);
+
+		hero->loadStats(lvl, maxHP, maxDmg);
+		heroes.push_back(std::move(hero));
+	}
+
+	size_t itemCount;
+	ifs >> itemCount;
+	ifs.ignore();
+
+	inventory.clear();
+	for (size_t i = 0; i < itemCount; ++i)
+	{
+		std::string itemName;
+		std::getline(ifs, itemName);
+
+		if (itemName == "Blade") inventory.push_back(std::make_unique<Blade>());
+		else if (itemName == "Healing Potion") inventory.push_back(std::make_unique<HealingPotion>());
+		else if (itemName == "Mirror") inventory.push_back(std::make_unique<Mirror>());
+		else if (itemName == "Ray") inventory.push_back(std::make_unique<Ray>());
+		else if (itemName == "Shield") inventory.push_back(std::make_unique<Shield>());
+	}
 }
