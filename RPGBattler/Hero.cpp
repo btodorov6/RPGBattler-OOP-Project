@@ -68,3 +68,11 @@ void Hero::hitByMirror()
 {
 	isAffectedByMirror = true;
 }
+
+void Hero::loadStats(int newLevel, int newMaxHp, int newMaxDmg)
+{
+	level = newLevel;
+	maxHP = newMaxHp;
+	maxDmg = newMaxDmg;
+	currentHP = maxHP;
+}

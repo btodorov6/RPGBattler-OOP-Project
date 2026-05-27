@@ -29,5 +29,9 @@ public:
 
 	void activateBlade();
 	void hitByMirror();
+
+	int getMaxDmg() const;
+	void loadStats(int newLevel, int newMaxHp, int newMaxDmg);
+	virtual char getHeroType() const = 0;
 };
 

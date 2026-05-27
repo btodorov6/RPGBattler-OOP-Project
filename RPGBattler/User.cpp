@@ -9,8 +9,10 @@
 #include "Mirror.h"
 #include "Ray.h"
 #include "Shield.h"
+
 #include <print>
 #include <iostream>
+#include <string>
 
 User::User(const std::string& name, const std::string& pass)
 	:username(name), password(pass), totalXp(0),currentXp(0),battlesPlayed(0),battlesWon(0)
@@ -277,4 +279,28 @@ void User::printHeroes() const
 			heroes[i]->getLevel()
 		);
 	}
+}
+
+void User::serialize(std::ofstream& ofs) const
+{
+	ofs << username << " " << password << " " << totalXp << " " << currentXp << " " << battlesPlayed << " " << battlesWon << "\n";
+
+	ofs << heroes.size() << "\n";
+
+	for (const auto& hero : heroes)
+	{
+		ofs << hero->getHeroType() << " " << hero->getName() << " " << hero->getLevel() << " " << hero->getMaxHp() << " " << hero->getMaxDmg() << "\n";
+	}
+
+	ofs << inventory.size() << "\n";
+
+	for (const auto& item : inventory)
+	{
+		ofs << item->getName() << "\n";
+	}
+}
+
+void User::deserialize(std::ifstream& ifs)
+{
+
 }

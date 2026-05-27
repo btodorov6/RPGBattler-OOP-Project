@@ -5,5 +5,6 @@ class Archer final : public Hero
 public: 
 	Archer(const std::string& heroName);
 	int Attack() override;
+	char getHeroType() const override;
 };
 

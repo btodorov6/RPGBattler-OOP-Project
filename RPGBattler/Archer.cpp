@@ -39,3 +39,8 @@ int Archer::Attack()
 
 	return generatedDmg;
 }
+
+char Archer::getHeroType() const
+{
+	return 'A';
+}

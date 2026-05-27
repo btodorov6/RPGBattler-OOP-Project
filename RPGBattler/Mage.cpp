@@ -36,3 +36,8 @@ int Mage::Attack()
 
 	return generatedDmg;
 }
+
+char Mage::getHeroType() const
+{
+	return 'M';
+}

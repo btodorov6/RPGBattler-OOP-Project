@@ -5,5 +5,6 @@ class Mage final : public Hero
 public:
 	Mage(const std::string& heroName);
 	int Attack() override;
+	char getHeroType() const override;
 };
 

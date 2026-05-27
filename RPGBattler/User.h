@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <fstream> 
+
 #include "Hero.h"
 #include "Item.h"
 class User
@@ -44,5 +46,8 @@ public:
 	int getWins() const;
 	double getWinRate() const;
 	void addItem(std::unique_ptr<Item> item);
+
+	void serialize(std::ofstream& ofs) const;
+	void deserialize(std::ifstream& ifs);
 };
 

@@ -41,3 +41,8 @@ void Warrior::TakeDamage(int damage)
 		}
 	}
 }
+
+char Warrior::getHeroType() const
+{
+	return 'W';
+}
