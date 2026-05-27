@@ -1,11 +1,12 @@
 2
-Bobi bobi123 130 0 15 11
+Bobi bobi123 145 15 17 12
 1
 W Borkos 2 22 8
 1
 Healing Potion
-Valyo valyo123 95 45 15 4
+Valyo valyo123 110 30 17 5
 2
 M Valkos 1 12 12
 A Valkos2 1 15 8
-0
+1
+Healing Potion

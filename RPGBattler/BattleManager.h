@@ -6,7 +6,7 @@ class BattleManager
 private:
 
 	BattleManager() = default;
-	void playTurn(User& player1, User& player2, Hero& activeHero, Hero& targetHero, const std::string& playerColor);
+	void playTurn(User& player1, User& player2, Hero& activeHero, Hero& targetHero, const std::string& playerColor, const std::string& targetColor);
 
 public:
 

@@ -13,9 +13,9 @@ BattleManager& BattleManager::getBattleManager()
 	return bm;
 }
 
-void BattleManager::playTurn(User& activePlayer, User& targetPlayer, Hero& activeHero, Hero& targetHero, const std::string& playerColour) //turn logic
+void BattleManager::playTurn(User& activePlayer, User& targetPlayer, Hero& activeHero, Hero& targetHero, const std::string& playerColor, const std::string& targetColor) //turn logic
 {
-	std::println("\n{}{}'s turn.",playerColour, activeHero.getName());
+	std::println("\n{}{}'s turn.",playerColor, activeHero.getName());
 	
 	while (true)
 	{
@@ -32,15 +32,17 @@ void BattleManager::playTurn(User& activePlayer, User& targetPlayer, Hero& activ
 
 			if (dmg > 0 && targetPlayer.hasItem("Shield"))
 			{
-				std::print("{}{} has attacked {} for {}dmg but {} has a SHIELD. Do you want to use it? (y/n) : ",REACTION_COLOUR, activeHero.getName(),targetHero.getName(),dmg,targetPlayer.getUsername());
+				std::print("\n{}{}{} has attacked {} for {}dmg but {} has a SHIELD. Do you want to use it? (y/n) : ", targetColor, activeHero.getName(), playerColor, targetHero.getName(), dmg, targetPlayer.getUsername());
 				char useShield;
 				std::cin >> useShield;
 				if (useShield == 'y' ||useShield == 'Y')
 				{
 					targetPlayer.consumeItem("Shield");
 					dmg = 0;
-					std::println("{} used a SHIELD and blocked the attack!{}", targetPlayer.getUsername(),playerColour);
+					std::println("{} used a SHIELD and blocked the attack!{}", targetPlayer.getUsername(),playerColor);
 				}
+
+				std::print("{}", playerColor);
 			}
 
 			if (dmg > 0)
@@ -77,16 +79,18 @@ void BattleManager::playTurn(User& activePlayer, User& targetPlayer, Hero& activ
 			{
 				if (targetPlayer.hasItem("Ray"))
 				{
-					std::print("{}{} has used MIRROR, but {} has a RAY! Counter it? (y/n): ",REACTION_COLOUR, activePlayer.getUsername(),targetPlayer.getUsername());
+					std::print("\n{}{}{} has used MIRROR, but {} has a RAY! Counter it? (y/n): ", targetColor, activePlayer.getUsername(), playerColor, targetPlayer.getUsername());
 					char useRay;
 					std::cin >> useRay;
 					if (useRay == 'y' || useRay == 'Y')
 					{
 						targetPlayer.consumeItem("Ray");
 						activePlayer.consumeItem("Mirror");
-						std::println("{} used RAY! The MIRROR shattered.{}", targetPlayer.getUsername(),playerColour);
+						std::println("{} used RAY! The MIRROR shattered.{}", targetPlayer.getUsername(),playerColor);
+						std::print("{}", playerColor);
 						return;
 					}
+					std::print("{}", playerColor);
 				}
 				activePlayer.useItemOnTarget("Mirror", targetHero);
 			}
@@ -105,6 +109,8 @@ void BattleManager::playTurn(User& activePlayer, User& targetPlayer, Hero& activ
 
 void BattleManager::startBattle(User& player1, User& player2, Hero& hero1, Hero& hero2)
 {
+	std::print("\033[2J\033[H");//clear console
+	std::print("{}", RESET);
 	std::println("Battle has begun!!!");
 	bool isPlayer1Turn = rand() % 2;
 
@@ -112,11 +118,11 @@ void BattleManager::startBattle(User& player1, User& player2, Hero& hero1, Hero&
 	{
 		if (isPlayer1Turn)
 		{
-			playTurn(player1, player2, hero1, hero2,PLAYER1_COLOUR);
+			playTurn(player1, player2, hero1, hero2,PLAYER1_COLOUR,PLAYER2_COLOUR);
 		}
 		else
 		{
-			playTurn(player2, player1, hero2, hero1,PLAYER2_COLOUR);
+			playTurn(player2, player1, hero2, hero1,PLAYER2_COLOUR,PLAYER1_COLOUR);
 		}
 		isPlayer1Turn = !isPlayer1Turn;
 		
@@ -142,5 +148,9 @@ void BattleManager::startBattle(User& player1, User& player2, Hero& hero1, Hero&
 		player2.addXp(10);
 		player1.addXp(5);
 	}
+	std::print("{}", RESET);
 
+	std::println("\npress Enter to return to main menu...");
+	std::cin.ignore(10000, '\n');
+	std::cin.get();
 }

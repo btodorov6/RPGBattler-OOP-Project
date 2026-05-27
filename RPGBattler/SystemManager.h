@@ -30,4 +30,7 @@ public:
     SystemManager& operator=(const SystemManager&) = delete;
 
     void run();
+
+    void clearConsole() const;
+    void waitOnInput() const;
 };
