@@ -65,10 +65,11 @@ void SystemManager::run()
 
         int choice;
         std::cin >> choice;
+
         if (std::cin.fail())
         {
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
+            std::println("{}Invalid input! Please enter a number.{}", RED, RESET);
+            waitOnInput();
             continue;
         }
 
@@ -108,8 +109,24 @@ void SystemManager::run()
                     loggedInPlayer2 ? loggedInPlayer2->getUsername() : "Not logged");
                 int shopChoice;
                 std::cin >> shopChoice;
-                if (shopChoice == 2 && loggedInPlayer2) shopMenu(*loggedInPlayer2);
-                else shopMenu(*loggedInPlayer1);
+
+                if (std::cin.fail())
+                {
+                    std::println("{}Invalid input! Please enter a number.{}", RED, RESET);
+                    waitOnInput();
+                    continue;
+                }
+
+                if (shopChoice == 1)
+                    shopMenu(*loggedInPlayer1);
+                else if (shopChoice == 2 && loggedInPlayer2 != nullptr)
+                    shopMenu(*loggedInPlayer2);
+                else
+                {
+                    std::println("{}Invalid input! That player is not logged in or doesn't exist.{}", RED, RESET);
+                    waitOnInput();
+                    continue;
+                }
             }
             break;
         case 5:
@@ -270,6 +287,13 @@ void SystemManager::shopMenu(User& user)
         std::print("Choice: ");
         int choice; 
         std::cin >> choice;
+
+        if (std::cin.fail())
+        {
+            std::println("{}Invalid input! Please enter a number.{}", RED, RESET);
+            waitOnInput();
+            continue;
+        }
         if (choice == 0) return;
 
         if (choice == 1 && user.getCurrentXp() >= 30)
@@ -310,7 +334,16 @@ void SystemManager::shopMenu(User& user)
         else if (choice == 6 && user.getCurrentXp() >= 50)
         {
             std::println("Choose hero type: 1. Warrior | 2. Mage | 3. Archer");
-            int type; std::cin >> type;
+            int type; 
+            std::cin >> type;
+
+            if (std::cin.fail())
+            {
+                std::println("{}Invalid input! Please enter a number.{}", RED, RESET);
+                waitOnInput();
+                continue;
+            }
+
             std::print("Enter hero name: ");
             std::string heroName; std::cin >> heroName;
 
@@ -453,6 +486,11 @@ void SystemManager::clearConsole() const
 
 void SystemManager::waitOnInput() const
 {
+    if (std::cin.fail())
+    {
+        std::cin.clear();
+    }
+
     std::println("\npress Enter to return to main menu...");
     std::cin.ignore(10000, '\n');
     std::cin.get();

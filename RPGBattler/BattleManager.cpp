@@ -27,6 +27,14 @@ void BattleManager::playTurn(User& activePlayer, User& targetPlayer, Hero& activ
 		int choice;
 		std::cin >> choice;
 
+		if (std::cin.fail())
+		{
+			std::cin.clear();
+			std::cin.ignore(10000, '\n');
+			std::println("Invalid input! Please enter a number.");
+			continue;
+		}
+
 		if (choice == 1)
 		{
 			int dmg = activeHero.Attack();
@@ -62,6 +70,14 @@ void BattleManager::playTurn(User& activePlayer, User& targetPlayer, Hero& activ
 			std::print("Choose item: ");
 			int itemChoice;
 			std::cin >> itemChoice;
+
+			if (std::cin.fail())
+			{
+				std::cin.clear();
+				std::cin.ignore(10000, '\n');
+				std::println("Invalid input! Please enter a number.");
+				continue;
+			}
 
 			if (itemChoice == 0) continue;
 
