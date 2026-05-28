@@ -12,7 +12,7 @@ int Mage::Attack()
 	int minDmg = 1;
 	int generatedDmg = (rand() % maxDmg) + minDmg;
 
-	if (!isAffectedByMirror)
+	if (!isAffectedByMirror)//mage ability transforms rolls to their opposite so a low roll becomes a high roll
 	{
 		std::print("{}, do you want to transform {}dmg to {}dmg? (y/n) ", name, generatedDmg, maxDmg - generatedDmg);
 		char special;

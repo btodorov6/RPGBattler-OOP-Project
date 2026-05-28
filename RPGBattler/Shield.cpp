@@ -7,5 +7,6 @@ std::string Shield::getName()
 
 void Shield::use(Hero& target)
 {
+	//reaction item logic in BattleManager::playTurn
 	return;
 }

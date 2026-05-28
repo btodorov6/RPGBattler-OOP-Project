@@ -7,5 +7,6 @@ std::string Ray::getName()
 
 void Ray::use(Hero& target)
 {
+	//reaction item logic in BattleManager::playTurn
 	return;
 }

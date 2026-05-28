@@ -19,7 +19,7 @@ int Warrior::Attack()
 	return generatedDmg;
 }
 
-void Warrior::TakeDamage(int damage)
+void Warrior::TakeDamage(int damage)//warrior special blocks between (1-4)dmg every time he is hit
 {
 	if (!isAffectedByMirror)
 	{

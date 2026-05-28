@@ -12,7 +12,7 @@ int Archer::Attack()
 	int minDmg = 1;
 	int generatedDmg = (rand() % maxDmg) + minDmg;
 	
-	if (!isAffectedByMirror)
+	if (!isAffectedByMirror)//Archer special ability doubles low dmg rolls
 	{
 		if (generatedDmg <= maxDmg / 2) //adjusted formula for high level characters
 		{

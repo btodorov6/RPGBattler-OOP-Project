@@ -14,6 +14,7 @@ BattleManager& BattleManager::getBattleManager()
 	return bm;
 }
 
+//battle sequence activeHero chooses their actions and targetHero can react in some cases
 void BattleManager::playTurn(User& activePlayer, User& targetPlayer, Hero& activeHero, Hero& targetHero, const std::string& playerColor, const std::string& targetColor) //turn logic
 {
 	std::println("\n{}{}'s turn.",playerColor, activeHero.getName());
@@ -124,6 +125,7 @@ void BattleManager::playTurn(User& activePlayer, User& targetPlayer, Hero& activ
 	}
 }
 
+//startBattle clears the console and makes players take turns also checks if battle is over and gives rewards
 void BattleManager::startBattle(User& player1, User& player2, Hero& hero1, Hero& hero2)
 {
 	std::print("\033[2J\033[H");//clear console

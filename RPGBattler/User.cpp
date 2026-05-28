@@ -282,7 +282,7 @@ void User::printHeroes() const
 	}
 }
 
-void User::serialize(std::ofstream& ofs) const
+void User::serialize(std::ofstream& ofs) const //serializes heroes info in a format used for savefiles
 {
 	ofs << username << " " << password << " " << totalXp << " " << currentXp << " " << battlesPlayed << " " << battlesWon << "\n";
 
@@ -301,7 +301,7 @@ void User::serialize(std::ofstream& ofs) const
 	}
 }
 
-void User::deserialize(std::ifstream& ifs)
+void User::deserialize(std::ifstream& ifs)//reads user data and allocates to new user instance
 {
 	ifs >> username >> password >> totalXp >> currentXp >> battlesPlayed >> battlesWon;
 

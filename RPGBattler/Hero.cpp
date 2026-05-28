@@ -74,6 +74,7 @@ int Hero::getMaxDmg() const
 	return maxDmg;
 }
 
+//loads the stats from the file to the new hero created in new instnace of game
 void Hero::loadStats(int newLevel, int newMaxHp, int newMaxDmg)
 {
 	level = newLevel;

@@ -76,24 +76,24 @@ void SystemManager::run()
 
         switch (choice)
         {
-        case 1:
+        case 1://register
             clearConsole();
             std::println("Registering new user...");
             registerUser(); 
             break;
-        case 2: 
+        case 2://login
             clearConsole();
             std::println("Logging existing user...");
             loginMenu(); 
             break;
-        case 3: 
+        case 3://leaderboard
             clearConsole();
 
             showLeaderboard();
 
             waitOnInput();
             break;
-        case 4:
+        case 4://shop
             if (!loggedInPlayer1) 
             {
                 clearConsole();
@@ -130,10 +130,10 @@ void SystemManager::run()
                 }
             }
             break;
-        case 5:
+        case 5://startbattle
             startBattleMenu();
             break;
-        case 6:
+        case 6://logout
             clearConsole();
 
             loggedInPlayer1 = nullptr;
@@ -142,7 +142,7 @@ void SystemManager::run()
 
             waitOnInput();
             break;
-        case 7:
+        case 7://save and exit
             clearConsole();
             saveToFile();
             std::println("{}Data saved successfully. Goodbye!{}", GREEN, RESET);
@@ -250,7 +250,7 @@ void SystemManager::showLeaderboard()
         sorted.push_back(&user);
     }
 
-    std::sort(sorted.begin(), sorted.end(), [](const User* a, const User* b) 
+    std::sort(sorted.begin(), sorted.end(), [](const User* a, const User* b) //sorts leaderboard by winCount then totalXP then winRate
         {
         if (a->getWins() != b->getWins()) return a->getWins() > b->getWins();
 
@@ -464,7 +464,7 @@ void SystemManager::startBattleMenu()
     }
 }
 
-void SystemManager::saveToFile()
+void SystemManager::saveToFile()//makes users serialize themselves and saves them to the file
 {
     std::ofstream ofs("gamedata.txt");
     if (!ofs.is_open()) return;
@@ -477,7 +477,7 @@ void SystemManager::saveToFile()
     ofs.close();
 }
 
-void SystemManager::loadFromFile()
+void SystemManager::loadFromFile()//reads data from file and assigns to current instance of game
 {
     std::ifstream ifs("gamedata.txt");
     if (!ifs.is_open()) return;
@@ -500,7 +500,7 @@ void SystemManager::clearConsole() const
     std::print("\033[2J\033[H");//clear console
 }
 
-void SystemManager::waitOnInput() const
+void SystemManager::waitOnInput() const//used when displaying messages that have to be read and then waits to press enter to return to main menu
 {
     if (std::cin.fail())
     {
