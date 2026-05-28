@@ -1,12 +1,24 @@
-2
+4
 Bobi bobi123 145 15 17 12
 1
 W Borkos 2 22 8
 1
 Healing Potion
-Valyo valyo123 110 30 17 5
+Valyo valyo123 165 55 26 7
 2
 M Valkos 1 12 12
 A Valkos2 1 15 8
-1
+2
 Healing Potion
+Healing Potion
+BORKOSMORKOS bobi123 80 50 9 7
+1
+M magiosnikaotoz 1 12 12
+2
+Blade
+Healing Potion
+usernomerchetiri 4444 0 0 0 0
+1
+A geroichetiri 1 15 8
+1
+Mirror

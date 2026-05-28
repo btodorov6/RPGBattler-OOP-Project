@@ -153,7 +153,25 @@ void SystemManager::registerUser()
     }
 
     User newUser(username, password);
+
+    std::string p1Name = "";
+    std::string p2Name = "";
+    if (loggedInPlayer1 != nullptr)
+    {
+        p1Name = loggedInPlayer1->getUsername();
+    }
+    if (loggedInPlayer2 != nullptr)
+    {
+        p2Name = loggedInPlayer2->getUsername();
+    }
+
     allUsers.push_back(std::move(newUser));
+
+    if (!p1Name.empty())
+        loggedInPlayer1 = findUser(p1Name);
+    if (!p2Name.empty()) 
+        loggedInPlayer2 = findUser(p2Name);
+
     std::println("{}Registration successful for {}!{}",GREEN, username,RESET);
     waitOnInput();
 }
