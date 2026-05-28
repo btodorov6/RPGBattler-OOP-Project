@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ctime>
+#include <cstdlib>
 #include "BattleManager.h"
 #include "User.h"
 #include "Hero.h"

@@ -271,9 +271,10 @@ void User::printHeroes() const
 {
 	for (size_t i = 0; i < heroes.size(); ++i)
 	{
-		std::println("{}. {} (Level: {}, HP: {}, MaxDmg: {})",
+		std::println("{}. {}-{} (Level: {}, HP: {}, MaxDmg: {})",
 			i + 1,
 			heroes[i]->getName(),
+			heroes[i]->getHeroType(),
 			heroes[i]->getLevel(),
 			heroes[i]->getMaxHp(),
 			heroes[i]->getLevel()

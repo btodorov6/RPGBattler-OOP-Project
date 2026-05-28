@@ -1,6 +1,7 @@
 #include "BattleManager.h"
 #include <iostream>
 #include <print>
+#include <cstdlib>
 
 //COLOURS
 const std::string RESET = "\033[0m";
