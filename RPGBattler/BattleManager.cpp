@@ -6,7 +6,7 @@
 //COLOURS
 const std::string RESET = "\033[0m";
 const std::string PLAYER1_COLOUR = "\033[36m";
-const std::string PLAYER2_COLOUR = "\033[31m";
+const std::string PLAYER2_COLOUR = "\033[91m";
 const std::string REACTION_COLOUR = "\033[33m";
 BattleManager& BattleManager::getBattleManager()
 {

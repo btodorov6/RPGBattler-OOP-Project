@@ -277,7 +277,7 @@ void User::printHeroes() const
 			heroes[i]->getHeroType(),
 			heroes[i]->getLevel(),
 			heroes[i]->getMaxHp(),
-			heroes[i]->getLevel()
+			heroes[i]->getMaxDmg()
 		);
 	}
 }

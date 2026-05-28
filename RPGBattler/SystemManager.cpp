@@ -17,9 +17,10 @@
 #include "BattleManager.h"
 
 const std::string BLUE = "\033[36m";
-const std::string RED = "\033[31m";
+const std::string RED = "\033[91m";
 const std::string GREEN = "\033[32m";
 const std::string RESET = "\033[0m";
+const std::string GOLD = "\033[33m";
 SystemManager::SystemManager()
 	:loggedInPlayer1(nullptr), loggedInPlayer2(nullptr)
 {
@@ -48,7 +49,7 @@ void SystemManager::run()
         clearConsole();
         std::print("{}",RESET);
 
-        std::println("{}---------------------------------",GREEN);
+        std::println("{}---------------------------------",GOLD);
         std::println("           RPG BATTLER           ");
         std::println("---------------------------------{}",RESET);
         std::println("Logged Player 1: {}{}{}",BLUE, loggedInPlayer1 ? loggedInPlayer1->getUsername() : "None", RESET);
@@ -364,6 +365,13 @@ void SystemManager::shopMenu(User& user)
             int heroChoice;
             std::cin >> heroChoice;
 
+            if (std::cin.fail())
+            {
+                std::println("{}Invalid input! Please enter a number.{}", RED, RESET);
+                waitOnInput();
+                continue;
+            }
+
             if (heroChoice == 0) continue;
 
             Hero* selectedHero = user.getHero(heroChoice - 1);
@@ -424,6 +432,14 @@ void SystemManager::startBattleMenu()
     std::print("Enter hero number: ");
     int h1Choice;
     std::cin >> h1Choice;
+
+    if (std::cin.fail())
+    {
+        std::println("{}Invalid input! Please enter a number.{}", RED, RESET);
+        waitOnInput();
+        return;
+    }
+
     Hero* h1 = loggedInPlayer1->getHero(h1Choice - 1);
 
     std::println("\n{} (Player 2), choose your hero for the battle:", loggedInPlayer2->getUsername());
