@@ -33,7 +33,7 @@ User::User(const std::string& name, const std::string& pass)
 	std::cin.ignore();
 	std::print("What is your hero called?: ");
 	std::string heroName;
-	std::getline(std::cin, heroName);
+	std::cin >> heroName;
 
 	std::unique_ptr<Hero> newHero;
 
