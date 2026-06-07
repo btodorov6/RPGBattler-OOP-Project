@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "User.h"
+#include "Command.h"
 
 class SystemManager
 {
@@ -12,17 +13,16 @@ private:
 
     SystemManager();
 
-    void registerUser();
-    void loginMenu();
-    void showLeaderboard();
-    void shopMenu(User& user);
-    void startBattleMenu();
+    void printConsole() const;
 
-    void saveToFile();
     void loadFromFile();
 
     User* findUser(const std::string& username);
+
+    std::vector<std::unique_ptr<Command>> menuCommands;
+    bool isRunning;
 public:
+    void stopRunning();
     
     static SystemManager& getSystemManager();
 
@@ -33,4 +33,12 @@ public:
 
     void clearConsole() const;
     void waitOnInput() const;
+
+    void registerUser();
+    void loginMenu();
+    void showLeaderboard();
+    void shopMenu();
+    void startBattleMenu();
+    void logOutPlayers();
+    void saveToFile();
 };

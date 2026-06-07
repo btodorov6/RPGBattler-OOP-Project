@@ -1,5 +1,13 @@
 #include "SystemManager.h"
 
+#include "RegisterCommand.h"
+#include "LoginCommand.h"
+#include "BattleCommand.h"
+#include "ShopCommand.h"
+#include "ExitCommand.h"
+#include "ShowLeaderboardCommand.h"
+#include "LogoutCommand.h"
+
 #include <fstream>
 #include <print>
 #include <iostream>
@@ -22,8 +30,16 @@ const std::string GREEN = "\033[32m";
 const std::string RESET = "\033[0m";
 const std::string GOLD = "\033[33m";
 SystemManager::SystemManager()
-	:loggedInPlayer1(nullptr), loggedInPlayer2(nullptr)
+	:loggedInPlayer1(nullptr), loggedInPlayer2(nullptr), isRunning(true)
 {
+    menuCommands.push_back(std::make_unique<RegisterCommand>(*this));
+    menuCommands.push_back(std::make_unique<LoginCommand>(*this));
+    menuCommands.push_back(std::make_unique<ShowLeaderboardCommand>(*this));
+    menuCommands.push_back(std::make_unique<ShopCommand>(*this));
+    menuCommands.push_back(std::make_unique<BattleCommand>(*this));
+    menuCommands.push_back(std::make_unique<LogoutCommand>(*this));
+    menuCommands.push_back(std::make_unique<ExitCommand>(*this));
+
 	loadFromFile();
 }
 
@@ -31,6 +47,11 @@ SystemManager& SystemManager::getSystemManager()
 {
 	static SystemManager sm;
 	return sm;
+}
+
+void SystemManager::stopRunning()
+{
+    isRunning = false;
 }
 
 User* SystemManager::findUser(const std::string& username)
@@ -44,114 +65,35 @@ User* SystemManager::findUser(const std::string& username)
 
 void SystemManager::run()
 {
-    while (true)
+    while (isRunning)
     {
         clearConsole();
-        std::print("{}",RESET);
-
-        std::println("{}---------------------------------",GOLD);
-        std::println("           RPG BATTLER           ");
-        std::println("---------------------------------{}",RESET);
-        std::println("Logged Player 1: {}{}{}",BLUE, loggedInPlayer1 ? loggedInPlayer1->getUsername() : "None", RESET);
-        std::println("Logged Player 2: {}{}{}",RED, loggedInPlayer2 ? loggedInPlayer2->getUsername() : "None", RESET);
-        std::println("---------------------------------");
-        std::println("1. Register New User");
-        std::println("2. Login User");
-        std::println("3. Open Leaderboard");
-        std::println("4. Open Shop (Spend XP)");
-        std::println("5. START BATTLE!");
-        std::println("6. Logout / Clear Players");
-        std::println("7. Save & Exit");
-        std::print("Choose option: ");
+        
+        printConsole();
 
         int choice;
         std::cin >> choice;
 
         if (std::cin.fail())
         {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
             std::println("{}Invalid input! Please enter a number.{}", RED, RESET);
             waitOnInput();
             continue;
         }
 
-        switch (choice)
+        int commandIndex = choice - 1;
+
+        if (commandIndex >= 0 && commandIndex < menuCommands.size())
         {
-        case 1://register
+            menuCommands[commandIndex]->execute();
+        }
+        else
+        {
             clearConsole();
-            std::println("Registering new user...");
-            registerUser(); 
-            break;
-        case 2://login
-            clearConsole();
-            std::println("Logging existing user...");
-            loginMenu(); 
-            break;
-        case 3://leaderboard
-            clearConsole();
-
-            showLeaderboard();
-
+            std::println("{}Invalid option.{}", RED, RESET);
             waitOnInput();
-            break;
-        case 4://shop
-            if (!loggedInPlayer1) 
-            {
-                clearConsole();
-
-                std::println("{}Please login at least Player 1 to use the shop.{}", RED, RESET);
-                
-                waitOnInput();
-            }
-            else 
-            {
-                clearConsole();
-
-                std::println("Which player wants to shop? 1. {} | 2. {}",loggedInPlayer1->getUsername(),
-                    loggedInPlayer2 ? loggedInPlayer2->getUsername() : "Not logged");
-                int shopChoice;
-                std::cin >> shopChoice;
-
-                if (std::cin.fail())
-                {
-                    std::println("{}Invalid input! Please enter a number.{}", RED, RESET);
-                    waitOnInput();
-                    continue;
-                }
-
-                if (shopChoice == 1)
-                    shopMenu(*loggedInPlayer1);
-                else if (shopChoice == 2 && loggedInPlayer2 != nullptr)
-                    shopMenu(*loggedInPlayer2);
-                else
-                {
-                    std::println("{}Invalid input! That player is not logged in or doesn't exist.{}", RED, RESET);
-                    waitOnInput();
-                    continue;
-                }
-            }
-            break;
-        case 5://startbattle
-            startBattleMenu();
-            break;
-        case 6://logout
-            clearConsole();
-
-            loggedInPlayer1 = nullptr;
-            loggedInPlayer2 = nullptr;
-            std::println("{}Players logged out.{}", GREEN, RESET);
-
-            waitOnInput();
-            break;
-        case 7://save and exit
-            clearConsole();
-            saveToFile();
-            std::println("{}Data saved successfully. Goodbye!{}", GREEN, RESET);
-            return;
-        default: 
-            clearConsole();
-            std::println("{}Invalid option.{}",RED,RESET); 
-            waitOnInput();
-            break;
         }
     }
 }
@@ -271,12 +213,52 @@ void SystemManager::showLeaderboard()
     }
 }
 
-void SystemManager::shopMenu(User& user)
+void SystemManager::shopMenu()
 {
+    if (!loggedInPlayer1)
+    {
+        clearConsole();
+        std::println("{}Please login at least Player 1 to use the shop.{}", RED, RESET);
+        waitOnInput();
+        return;
+    }
+
+    clearConsole();
+    std::println("Which player wants to shop? 1. {} | 2. {}", loggedInPlayer1->getUsername(),
+        loggedInPlayer2 ? loggedInPlayer2->getUsername() : "Not logged");
+
+    int shopChoice;
+    std::cin >> shopChoice;
+
+    if (std::cin.fail())
+    {
+        std::cin.clear();
+        std::cin.ignore(10000, '\n');
+        std::println("{}Invalid input! Please enter a number.{}", RED, RESET);
+        waitOnInput();
+        return;
+    }
+
+    User* shoppingUser = nullptr;
+
+    if (shopChoice == 1)
+    {
+        shoppingUser = loggedInPlayer1;
+    }
+    else if (shopChoice == 2 && loggedInPlayer2 != nullptr)
+    {
+        shoppingUser = loggedInPlayer2;
+    }
+    else
+    {
+        std::println("{}Invalid input! That player is not logged in or doesn't exist.{}", RED, RESET);
+        waitOnInput();
+        return;
+    }
     while (true)
     {
         clearConsole();
-        std::println("\n--- SHOP FOR {} (Available XP: {}) ---", user.getUsername(), user.getCurrentXp());
+        std::println("\n--- SHOP FOR {} (Available XP: {}) ---", shoppingUser->getUsername(), shoppingUser->getCurrentXp());
         std::println("1. Buy Healing Potion (30 XP)");
         std::println("2. Buy Blade (50 XP)");
         std::println("3. Buy Mirror (80 XP)");
@@ -286,60 +268,65 @@ void SystemManager::shopMenu(User& user)
         std::println("7. Upgrade Hero Level (100 XP)");
         std::println("0. Exit Shop");
         std::print("Choice: ");
-        int choice; 
+        int choice;
         std::cin >> choice;
 
         if (std::cin.fail())
         {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
             std::println("{}Invalid input! Please enter a number.{}", RED, RESET);
             waitOnInput();
             continue;
         }
+
         if (choice == 0) return;
 
-        if (choice == 1 && user.getCurrentXp() >= 30)
+        if (choice == 1 && shoppingUser->getCurrentXp() >= 30)
         {
-            user.removeXp(30);
-            user.addItem(std::make_unique<HealingPotion>());
-            std::println("{}Bought HEALING POTION!{}",GREEN,RESET);
+            shoppingUser->removeXp(30);
+            shoppingUser->addItem(std::make_unique<HealingPotion>());
+            std::println("{}Bought HEALING POTION!{}", GREEN, RESET);
             waitOnInput();
         }
-        else if (choice == 2 && user.getCurrentXp() >= 50)
+        else if (choice == 2 && shoppingUser->getCurrentXp() >= 50)
         {
-            user.removeXp(50);
-            user.addItem(std::make_unique<Blade>());
+            shoppingUser->removeXp(50);
+            shoppingUser->addItem(std::make_unique<Blade>());
             std::println("{}Bought BLADE!{}", GREEN, RESET);
             waitOnInput();
         }
-        else if (choice == 3 && user.getCurrentXp() >= 80)
+        else if (choice == 3 && shoppingUser->getCurrentXp() >= 80)
         {
-            user.removeXp(80);
-            user.addItem(std::make_unique<Mirror>());
+            shoppingUser->removeXp(80);
+            shoppingUser->addItem(std::make_unique<Mirror>());
             std::println("{}Bought MIRROR!{}", GREEN, RESET);
             waitOnInput();
         }
-        else if (choice == 4 && user.getCurrentXp() >= 90)
+        else if (choice == 4 && shoppingUser->getCurrentXp() >= 90)
         {
-            user.removeXp(90);
-            user.addItem(std::make_unique<Ray>());
+            shoppingUser->removeXp(90);
+            shoppingUser->addItem(std::make_unique<Ray>());
             std::println("{}Bought RAY!{}", GREEN, RESET);
             waitOnInput();
         }
-        else if (choice == 5 && user.getCurrentXp() >= 100)
+        else if (choice == 5 && shoppingUser->getCurrentXp() >= 100)
         {
-            user.removeXp(100);
-            user.addItem(std::make_unique<Shield>());
+            shoppingUser->removeXp(100);
+            shoppingUser->addItem(std::make_unique<Shield>());
             std::println("{}Bought Shield!{}", GREEN, RESET);
             waitOnInput();
         }
-        else if (choice == 6 && user.getCurrentXp() >= 50)
+        else if (choice == 6 && shoppingUser->getCurrentXp() >= 50)
         {
             std::println("Choose hero type: 1. Warrior | 2. Mage | 3. Archer");
-            int type; 
+            int type;
             std::cin >> type;
 
             if (std::cin.fail())
             {
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
                 std::println("{}Invalid input! Please enter a number.{}", RED, RESET);
                 waitOnInput();
                 continue;
@@ -348,18 +335,19 @@ void SystemManager::shopMenu(User& user)
             std::print("Enter hero name: ");
             std::string heroName; std::cin >> heroName;
 
-            user.removeXp(50);
-            if (type == 2) user.addHero(std::make_unique<Mage>(heroName));
-            else if (type == 3) user.addHero(std::make_unique<Archer>(heroName));
-            else user.addHero(std::make_unique<Warrior>(heroName));
+            shoppingUser->removeXp(50);
+            if (type == 2) shoppingUser->addHero(std::make_unique<Mage>(heroName));
+            else if (type == 3) shoppingUser->addHero(std::make_unique<Archer>(heroName));
+            else shoppingUser->addHero(std::make_unique<Warrior>(heroName));
+
             std::println("{}New hero bought!{}", GREEN, RESET);
             waitOnInput();
         }
-        else if (choice == 7 && user.getCurrentXp() >= 100)
+        else if (choice == 7 && shoppingUser->getCurrentXp() >= 100)
         {
-            user.removeXp(100);
+            shoppingUser->removeXp(100);
             std::println("\nSelect a hero to upgrade:");
-            user.printHeroes();
+            shoppingUser->printHeroes();
             std::print("Enter hero number (0 to cancel): ");
 
             int heroChoice;
@@ -367,6 +355,8 @@ void SystemManager::shopMenu(User& user)
 
             if (std::cin.fail())
             {
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
                 std::println("{}Invalid input! Please enter a number.{}", RED, RESET);
                 waitOnInput();
                 continue;
@@ -374,18 +364,18 @@ void SystemManager::shopMenu(User& user)
 
             if (heroChoice == 0) continue;
 
-            Hero* selectedHero = user.getHero(heroChoice - 1);
+            Hero* selectedHero = shoppingUser->getHero(heroChoice - 1);
 
             if (selectedHero == nullptr)
             {
-                std::println("{}Invalid hero selection!{}",RED,RESET);
+                std::println("{}Invalid hero selection!{}", RED, RESET);
                 waitOnInput();
                 continue;
             }
 
             std::println("\nChoose upgrade effect for {}:", selectedHero->getName());
             std::println("1. Permanently increase Max HP by {}+2{}", GREEN, RESET);
-            std::println("2. Permanently increase Max Damage upper limit by {}+1{}",  GREEN, RESET);
+            std::println("2. Permanently increase Max Damage upper limit by {}+1{}", GREEN, RESET);
             std::print("Choice: ");
 
             int statChoice;
@@ -412,7 +402,7 @@ void SystemManager::shopMenu(User& user)
 
         }
         else {
-            std::println("{}Not enough XP or invalid choice!{}",RED,RESET);
+            std::println("{}Not enough XP or invalid choice!{}", RED, RESET);
             waitOnInput();
         }
     }
@@ -510,4 +500,33 @@ void SystemManager::waitOnInput() const//used when displaying messages that have
     std::println("\npress Enter to return to main menu...");
     std::cin.ignore(10000, '\n');
     std::cin.get();
+}
+
+void SystemManager::printConsole() const
+{
+    std::print("{}", RESET);
+
+    std::println("{}---------------------------------", GOLD);
+    std::println("            RPG BATTLER            ");
+    std::println("---------------------------------{}", RESET);
+    std::println("Logged Player 1: {}{}{}", BLUE, loggedInPlayer1 ? loggedInPlayer1->getUsername() : "None", RESET);
+    std::println("Logged Player 2: {}{}{}", RED, loggedInPlayer2 ? loggedInPlayer2->getUsername() : "None", RESET);
+    std::println("---------------------------------");
+    std::println("1. Register New User");
+    std::println("2. Login User");
+    std::println("3. Open Leaderboard");
+    std::println("4. Open Shop (Spend XP)");
+    std::println("5. START BATTLE!");
+    std::println("6. Logout / Clear Players");
+    std::println("7. Save & Exit");
+    std::print("Choose option: ");
+}
+
+void SystemManager::logOutPlayers()
+{
+    clearConsole();
+
+    loggedInPlayer1 = nullptr;
+    loggedInPlayer2 = nullptr;
+    std::println("{}Players logged out.{}", GREEN, RESET);
 }

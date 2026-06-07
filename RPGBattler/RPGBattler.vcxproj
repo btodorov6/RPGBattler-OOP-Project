@@ -128,30 +128,45 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Archer.cpp" />
+    <ClCompile Include="BattleCommand.cpp" />
     <ClCompile Include="BattleManager.cpp" />
     <ClCompile Include="Blade.cpp" />
+    <ClCompile Include="ExitCommand.cpp" />
     <ClCompile Include="HealingPotion.cpp" />
     <ClCompile Include="Hero.cpp" />
+    <ClCompile Include="LoginCommand.cpp" />
+    <ClCompile Include="LogoutCommand.cpp" />
     <ClCompile Include="Mage.cpp" />
     <ClCompile Include="Mirror.cpp" />
     <ClCompile Include="Ray.cpp" />
+    <ClCompile Include="RegisterCommand.cpp" />
     <ClCompile Include="RPGBattler.cpp" />
     <ClCompile Include="Shield.cpp" />
+    <ClCompile Include="ShopCommand.cpp" />
+    <ClCompile Include="ShowLeaderboardCommand.cpp" />
     <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="Warrior.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Archer.h" />
+    <ClInclude Include="BattleCommand.h" />
     <ClInclude Include="BattleManager.h" />
     <ClInclude Include="Blade.h" />
+    <ClInclude Include="Command.h" />
+    <ClInclude Include="ExitCommand.h" />
     <ClInclude Include="HealingPotion.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="LoginCommand.h" />
+    <ClInclude Include="LogoutCommand.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="Mirror.h" />
     <ClInclude Include="Ray.h" />
+    <ClInclude Include="RegisterCommand.h" />
     <ClInclude Include="Shield.h" />
+    <ClInclude Include="ShopCommand.h" />
+    <ClInclude Include="ShowLeaderboardCommand.h" />
     <ClInclude Include="SystemManager.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="Warrior.h" />
